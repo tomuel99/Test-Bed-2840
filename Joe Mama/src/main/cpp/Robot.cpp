@@ -17,6 +17,7 @@
 #include <frc/Solenoid.h>
 #include <frc/SolenoidBase.h>
 #include <frc/DoubleSolenoid.h>
+#include <frc/PowerDistributionPanel.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/Timer.h>
@@ -26,7 +27,8 @@ using namespace frc;
 Joystick stick{0};
 PWMTalonFX motor{0};
 Compressor compressor{0};
-DoubleSolenoid piston{7, 6};
+DoubleSolenoid piston{2, 3};
+//Solenoid piston{4};
 Timer timer;
 //WPI_TalonFX * motor = new WPI_TalonFX(0);
 
@@ -34,10 +36,11 @@ void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   SmartDashboard::PutData("Auto Modes", &m_chooser);
-  compressor.SetClosedLoopControl(true);
-  //compressor.Start();
+  compressor.SetClosedLoopControl(false);
+  compressor.Start();
   timer.Reset();
   timer.Start();
+  //piston.Set(false);
 }
 
 /**
@@ -49,6 +52,7 @@ void Robot::RobotInit() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
+  //piston.Set(false);
   SmartDashboard::PutNumber("Pressure", compressor.GetPressureSwitchValue());
   SmartDashboard::PutNumber("Current", compressor.GetCompressorCurrent());
 }
@@ -87,15 +91,45 @@ void Robot::AutonomousPeriodic() {
   }
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+  //piston.Set(false);
+}
 
-void Robot::TeleopPeriodic() {
-  if (stick.GetRawButton(1)) {
+void Robot::TeleopPeriodic() {/*
+  if (timer.Get() < 1.0) {
+    piston.Set(false);
+  }
+  else if (timer.Get() < 2.0) {
+    piston.Set(true);
+  }
+  else if (timer.Get() < 3.0) {
+    piston.Set(false);
+  }
+  else if (timer.Get() < 4.0) {
+    piston.Set(true);
+  }
+  else if (timer.Get() < 5.0) {
+    piston.Set(false);
+  }
+  else if (timer.Get() < 6.0) {
+    piston.Set(true);
+  }
+  else {
+    piston.Set(false);
+  }
+  */
+  /*if (stick.GetRawButton(1)) {
     motor.Set(0.75);
   }
   else if (stick.GetRawButton(2)) {
     motor.Set(-1.0);
   }
+  if (stick.GetRawButton(4)) {
+    piston.Set(true);
+  }
+  else if (stick.GetRawButton(3)) {
+    piston.Set(false);
+  }*/
 
   if (stick.GetRawButton(4)) {
     piston.Set(DoubleSolenoid::Value::kForward);
@@ -107,7 +141,8 @@ void Robot::TeleopPeriodic() {
     piston.Set(DoubleSolenoid::Value::kOff);
   }
 
-  motor.Set(-stick.GetRawAxis(1));
+  //motor.Set(-stick.GetRawAxis(1));
+  
 }
 
 void Robot::TestPeriodic() {}
