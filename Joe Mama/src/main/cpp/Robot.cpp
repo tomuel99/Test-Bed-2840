@@ -20,15 +20,14 @@
 #include <frc/PowerDistributionPanel.h>
 
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/Timer.h>
 
 using namespace frc;
 
 Joystick stick{0};
 PWMTalonFX motor{0};
 Compressor compressor{0};
-DoubleSolenoid piston{2, 3};
-DoubleSolenoid piston2{0,1};
+DoubleSolenoid bottom{2, 3};
+DoubleSolenoid middle{0,1};
 //Solenoid piston{4};
 Timer timer;
 //WPI_TalonFX * motor = new WPI_TalonFX(0);
@@ -133,16 +132,16 @@ void Robot::TeleopPeriodic() {/*
   }*/
 
   if (stick.GetRawButton(3)) {
-    piston.Set(DoubleSolenoid::Value::kForward);
-    piston2.Set(DoubleSolenoid::Value::kForward);
+    bottom.Set(DoubleSolenoid::Value::kForward);
+    middle.Set(DoubleSolenoid::Value::kForward);
   }
   else if (stick.GetRawButton(4)) {
-    piston.Set(DoubleSolenoid::Value::kReverse);
-    piston2.Set(DoubleSolenoid::Value::kReverse);
+    bottom.Set(DoubleSolenoid::Value::kReverse);
+    middle.Set(DoubleSolenoid::Value::kReverse);
   }
   else {
-    piston.Set(DoubleSolenoid::Value::kOff);
-    piston2.Set(DoubleSolenoid::Value::kOff);
+    bottom.Set(DoubleSolenoid::Value::kOff);
+    middle.Set(DoubleSolenoid::Value::kOff);
   }
 
   //motor.Set(-stick.GetRawAxis(1));
